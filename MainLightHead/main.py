@@ -122,6 +122,84 @@ def light_color_shades():
         strip.set_pixel(pix, c)
     strip.show()
     time.sleep(0.5)
+    
+def print_formatted(number):
+    for i in range(1,number+1):
+        temp=("{0:32b}".format(i))
+        print(temp)
+
+#print_formatted(128)
+
+
+def light_all_off():
+    for pix in range(numpix):
+        strip.set_pixel(pix, (0,0,0,0))
+        
+def light_wave():
+    row = 0
+    sign = 1
+    light_all_off()
+    for sector in range(pix_per_round):
+        light_all_off()
+        strip.set_pixel(row*pix_per_round + sector, (0,0,0,255))
+        strip.show()
+        time.sleep(0.02)               
+        row = row + sign
+        if (row >= rows):
+            sign = -1
+            row = row + sign
+        elif row < 0:
+            sign = 1
+            row = 1
+            
+def light_packman():
+    green_ball = [12,15,3]
+    packman    = [28,7,7]
+    green_ball_0 = 7
+    mask = 1
+    mask_over = 1 << (pix_per_round)
+    mask_all = 0
+    sleep = 0.2
+    print(green_ball)
+    
+    mask = 1
+    for sector in range(pix_per_round):
+        mask_all = mask_all | mask
+        mask = mask << 1
+
+    for row in range(rows):
+        green_ball[row] = green_ball[row] << 6
+        
+    for step in range(pix_per_round * 20):
+        light_all_off()
+        # print(green_ball)
+        
+        mask = 1
+        for sector in range(pix_per_round):
+            #print(green_ball)
+            
+            for row in range(rows):
+                if (green_ball[row] & mask) != 0:
+                    strip.set_pixel(row*pix_per_round + sector, (255,0,0,0))
+                if (packman[row] & mask) != 0:
+                    strip.set_pixel(row*pix_per_round + sector, (0,255,0,0))
+            mask = mask << 1
+                
+        strip.show()
+        
+            
+        for row in range(rows):
+            green_ball[row] = green_ball[row] << 1    
+            if (green_ball[row] & mask_over) != 0:
+                green_ball[row] = (green_ball[row] & mask_all) | 1
+                
+            packman[row] = packman[row] << 1    
+            if (packman[row] & mask_over) != 0:
+                packman[row] = (packman[row] & mask_all) | 1
+
+        time.sleep(sleep) 
+        
+        
 
 def light_random_scatter():
     for pix in range(numpix):
@@ -170,7 +248,9 @@ def light_house_normal():
 
 while True:
     while run_scheme == 0:
-        light_house_normal()
+        # light_house_normal()
+        # light_wave()
+        light_packman()
     while run_scheme == 1:
         light_color_shades()
     while run_scheme == 2:
@@ -191,5 +271,4 @@ while True:
                 #time.sleep(0.1)
                 strip.show()
                 
-
 

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import time
-# import board 
+import board 
 import neopixel
 import digitalio
 import math
@@ -109,3 +109,4 @@ while True:
     time.sleep(2)
 
     rainbow_cycle(0.01)  # rainbow cycle with 1ms delay per step
+

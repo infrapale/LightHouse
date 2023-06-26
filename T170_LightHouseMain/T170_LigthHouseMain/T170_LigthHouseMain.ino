@@ -7,7 +7,8 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <RH_RF69.h>
-#include <AstridAddrSpace.h>
+#include <rfm69_support.h>
+//#include <AstridAddrSpace.h>
 #include <Astrid.h>
 #include <VillaAstridCommon.h>
 #include <SimpleTimer.h> 
